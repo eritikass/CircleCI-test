@@ -1,24 +1,31 @@
 # Use the latest 2.1 version of CircleCI pipeline processing engine, see https://circleci.com/docs/2.0/configuration-reference/
 version: 2.1
 
-# Use a package of configuration called an orb, see https://circleci.com/docs/2.0/orb-intro/
-orbs:
-  # Declare a dependency on the welcome-orb
-  welcome: circleci/welcome-orb@0.3.1
+# # Use a package of configuration called an orb, see https://circleci.com/docs/2.0/orb-intro/
+# orbs:
+#   # Declare a dependency on the welcome-orb
+#   welcome: circleci/welcome-orb@0.3.1
 
 jobs:
     test:
       docker:
         - image: circleci/node:10
       steps:
-        - run: ls -lah
+        - setup_remote_docker
         - checkout
         - run: ls -lah
-        - run: echo "hello world"
+        - run: docker run hello-world
+        - run: |
+          docker ps -a
+          docker images
+          docker pull ubuntu
+          docker images
+          docker run -v $(pwd):/app -w /app alpine ls -lah
+          docker ps -a
 
 # Orchestrate or schedule a set of jobs, see https://circleci.com/docs/2.0/workflows/
 workflows:
   build_and_test:
     jobs:
-      - welcome/run
+      # - welcome/run
       - test
