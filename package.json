@@ -1,0 +1,23 @@
+{
+  "name": "CircleCI-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eritikass/CircleCI-test.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/eritikass/CircleCI-test/issues"
+  },
+  "homepage": "https://github.com/eritikass/CircleCI-test#readme",
+  "devDependencies": {
+    "jest": "^24.7.1"
+  }
+}

@@ -13,16 +13,10 @@ jobs:
       steps:
         - setup_remote_docker
         - checkout
-        - run: ls -lah
-        - run: docker run hello-world
+        - run: npm ci
+        - run: npm test
         - run: docker build --pull -t test123 .
-        - run: |
-            docker run --rm --name=test123 -d -p 80:80 test123
-            docker ps
-            sleep 5
-            # curl http://0.0.0.0:80/
-            docker stop test123
-            env
+        - run: docker run --rm test123 npm test
 
 
 # Orchestrate or schedule a set of jobs, see https://circleci.com/docs/2.0/workflows/
