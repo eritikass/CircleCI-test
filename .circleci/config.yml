@@ -16,7 +16,9 @@ jobs:
         - setup_remote_docker
         - checkout
         - run: echo $VAR1
-        - run: export DOCKER_IMAGE=test:cicleci-$CIRCLE_WORKFLOW_ID
+        - run: |
+            export DOCKER_IMAGE=test:cicleci-$CIRCLE_WORKFLOW_ID
+            echo $DOCKER_IMAGE
         - run: echo $DOCKER_IMAGE
         - run: time npm ci
         - run: npm test
