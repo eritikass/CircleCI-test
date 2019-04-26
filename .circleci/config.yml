@@ -22,6 +22,9 @@ jobs:
             docker images
             docker run -v $(pwd):/app -w /app alpine ls -lah
             docker ps -a
+        - run: |
+            ls -lah
+            docker run -v $(pwd):/app -w /app alpine ls -lah
 
 # Orchestrate or schedule a set of jobs, see https://circleci.com/docs/2.0/workflows/
 workflows:
