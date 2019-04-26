@@ -14,7 +14,7 @@ jobs:
         - setup_remote_docker
         - checkout
         - run: |
-            echo "export DOCKER_IMAGE=test:cicleci-$CIRCLE_WORKFLOW_ID" >> $BASH_ENV
+            echo "export DOCKER_IMAGE=eritikass/whatever:cicleci-$CIRCLE_WORKFLOW_ID" >> $BASH_ENV
         - run: echo $DOCKER_IMAGE
         - run: time npm ci
         - run: npm test
