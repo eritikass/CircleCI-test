@@ -43,6 +43,6 @@ workflows:
   testing_things:
     jobs:
       - install
-      - test
-        requires:
-          - install
+      - test:
+          requires:
+            - install
