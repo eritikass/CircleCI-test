@@ -44,3 +44,5 @@ workflows:
     jobs:
       - install
       - test
+        requires:
+          - install
