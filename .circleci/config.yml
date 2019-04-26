@@ -14,6 +14,8 @@ jobs:
         - image: circleci/node:10
       steps:
         - checkout
+        - restore_cache:
+            key: dependency-cache-{{ checksum "package.json" }}
         - run: time npm ci
         - save_cache:
             key: dependency-cache-{{ checksum "package.json" }}
