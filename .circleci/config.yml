@@ -30,7 +30,7 @@ jobs:
             echo "export DOCKER_IMAGE=eritikass/whatever:cicleci-$CIRCLE_WORKFLOW_ID" >> $BASH_ENV
         - run: echo $DOCKER_IMAGE
         - restore_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
+            key: dependency-cache-{{ checksum "package.json" }}
         - run: npm test
         - run: docker build --pull -t $DOCKER_IMAGE .
         - run: docker run --rm $DOCKER_IMAGE npm test
