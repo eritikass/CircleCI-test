@@ -10,20 +10,17 @@ jobs:
     test:
       docker:
         - image: circleci/node:10
-          environment:
-            VAR1: LALAL-$CIRCLE_WORKFLOW_ID
       steps:
         - setup_remote_docker
         - checkout
-        - run: echo $VAR1
         - run: |
-            export DOCKER_IMAGE=test:cicleci-$CIRCLE_WORKFLOW_ID
-            echo $DOCKER_IMAGE
+            echo "export DOCKER_IMAGE=test:cicleci-$CIRCLE_WORKFLOW_ID" >> $BASH_ENV
         - run: echo $DOCKER_IMAGE
         - run: time npm ci
         - run: npm test
-        - run: docker build --pull -t test123 .
-        - run: docker run --rm test123 npm test
+        - run: docker build --pull -t $DOCKER_IMAGE .
+        - run: docker run --rm $DOCKER_IMAGE npm test
+        - run: docker ps
 
 
 # Orchestrate or schedule a set of jobs, see https://circleci.com/docs/2.0/workflows/
