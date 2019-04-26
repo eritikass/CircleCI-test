@@ -6,7 +6,19 @@ version: 2.1
 #   # Declare a dependency on the welcome-orb
 #   welcome: circleci/welcome-orb@0.3.1
 
+
+
 jobs:
+    install:
+      docker:
+        - image: circleci/node:10
+      steps:
+        - checkout
+        - run: time npm ci
+        - save_cache:
+            key: dependency-cache-{{ checksum "package.json" }}
+            paths:
+              - ./node_modules
     test:
       docker:
         - image: circleci/node:10
@@ -17,7 +29,8 @@ jobs:
         - run: |
             echo "export DOCKER_IMAGE=eritikass/whatever:cicleci-$CIRCLE_WORKFLOW_ID" >> $BASH_ENV
         - run: echo $DOCKER_IMAGE
-        - run: time npm ci
+        - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
         - run: npm test
         - run: docker build --pull -t $DOCKER_IMAGE .
         - run: docker run --rm $DOCKER_IMAGE npm test
@@ -29,5 +42,5 @@ jobs:
 workflows:
   build_and_test:
     jobs:
-      # - welcome/run
+      - install
       - test
