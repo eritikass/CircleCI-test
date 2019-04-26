@@ -20,11 +20,16 @@ jobs:
             docker images
             docker pull ubuntu
             docker images
-            docker run -v $(pwd):/app -w /app alpine ls -lah
+            docker run --rm -v $(pwd):/app -w /app alpine ls -lah
             docker ps -a
         - run: |
             ls -lah
-            docker run -v $(pwd):/app -w /app alpine ls -lah
+            echo "aaa"
+            docker run --rm -v $(pwd):/app -w /app alpine ls -lah
+            echo "bbb"
+            docker run --rm -v $(pwd):/app -w /app alpine pwd
+            echo "ccc"
+            docker run --rm -v $(pwd):/app -w /app alpine cat README.md
 
 # Orchestrate or schedule a set of jobs, see https://circleci.com/docs/2.0/workflows/
 workflows:
