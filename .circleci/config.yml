@@ -10,10 +10,15 @@ jobs:
     test:
       docker:
         - image: circleci/node:10
+          environment:
+            VAR1: LALAL
       steps:
         - setup_remote_docker
         - checkout
-        - run: npm ci
+        - run: echo $VAR1
+        - run: export DOCKER_IMAGE=test:cicleci-$CIRCLE_WORKFLOW_ID
+        - run: echo $DOCKER_IMAGE
+        - run: time npm ci
         - run: npm test
         - run: docker build --pull -t test123 .
         - run: docker run --rm test123 npm test
