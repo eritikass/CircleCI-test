@@ -18,6 +18,8 @@ jobs:
         - run: docker build --pull -t test123 .
         - run: |
             docker run --rm --name=test123 -d -p 80:80 test123
+            docker ps
+            docker-machine ip
             curl http://localhost:80/
             docker stop test123
 
