@@ -15,21 +15,12 @@ jobs:
         - checkout
         - run: ls -lah
         - run: docker run hello-world
+        - run: docker build --pull -t test123 .
         - run: |
-            docker ps -a
-            docker images
-            docker pull ubuntu
-            docker images
-            docker run --rm -v $(pwd):/app -w /app alpine ls -lah
-            docker ps -a
-        - run: |
-            ls -lah
-            echo "aaa"
-            docker run --rm -v $(pwd):/app -w /app alpine ls -lah
-            echo "bbb"
-            docker run --rm -v $(pwd):/app -w /app alpine pwd
-            echo "ccc"
-            docker run --rm -v $(pwd):/app -w /app alpine cat README.md
+          docker run --rm --name=test123 -d -p 80:80 test123
+          curl http://localhost:80/
+          docker stop test123
+
 
 # Orchestrate or schedule a set of jobs, see https://circleci.com/docs/2.0/workflows/
 workflows:
