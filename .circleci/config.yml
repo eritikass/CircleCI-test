@@ -23,14 +23,14 @@ jobs:
       docker:
         - image: circleci/node:10
       steps:
-        - setup_remote_docker
-        - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
         - checkout
-        - run: |
-            echo "export DOCKER_IMAGE=eritikass/whatever:cicleci-$CIRCLE_WORKFLOW_ID" >> $BASH_ENV
-        - run: echo $DOCKER_IMAGE
         - restore_cache:
             key: dependency-cache-{{ checksum "package.json" }}
+        - setup_remote_docker
+        - run: |
+            docker login -u $DOCKER_USER -p $DOCKER_PASS
+            echo "export DOCKER_IMAGE=eritikass/whatever:cicleci-$CIRCLE_WORKFLOW_ID" >> $BASH_ENV
+        - run: echo $DOCKER_IMAGE
         - run: npm test
         - run: docker build --pull -t $DOCKER_IMAGE .
         - run: docker run --rm $DOCKER_IMAGE npm test
@@ -40,7 +40,7 @@ jobs:
 
 # Orchestrate or schedule a set of jobs, see https://circleci.com/docs/2.0/workflows/
 workflows:
-  build_and_test:
+  testing_things:
     jobs:
       - install
       - test
