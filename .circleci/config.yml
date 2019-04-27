@@ -14,8 +14,8 @@ jobs:
         - image: circleci/node:10
       steps:
         - checkout
-        - restore_cache:
-            key: node-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
+        # - restore_cache:
+        #     key: node-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
         - run: time npm ci
         - save_cache:
             key: node-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
