@@ -1,24 +1,55 @@
 # Use the latest 2.1 version of CircleCI pipeline processing engine, see https://circleci.com/docs/2.0/configuration-reference/
 version: 2.1
 
-# Use a package of configuration called an orb, see https://circleci.com/docs/2.0/orb-intro/
-orbs:
-  # Declare a dependency on the welcome-orb
-  welcome: circleci/welcome-orb@0.3.1
+# # Use a package of configuration called an orb, see https://circleci.com/docs/2.0/orb-intro/
+# orbs:
+#   # Declare a dependency on the welcome-orb
+#   welcome: circleci/welcome-orb@0.3.1
+
+
 
 jobs:
+    install:
+      docker:
+        - image: circleci/node:10
+      steps:
+        - checkout
+        # - restore_cache:
+        #     key: node-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
+        - run: time npm ci
+        - save_cache:
+            key: node-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
+            paths:
+              - ./node_modules
+
     test:
       docker:
         - image: circleci/node:10
       steps:
-        - run: ls -lah
         - checkout
-        - run: ls -lah
-        - run: echo "hello world"
+        - restore_cache:
+            key: node-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
+        - setup_remote_docker
+        - run: |
+            docker login -u $DOCKER_USER -p $DOCKER_PASS
+            echo "export DOCKER_IMAGE=eritikass/whatever:cicleci-$CIRCLE_WORKFLOW_ID" >> $BASH_ENV
+            docker pull eritikass/whatever:cicleci-latest || true
+        - run: echo $DOCKER_IMAGE
+        - run: npm test
+        - run: docker build --pull -t $DOCKER_IMAGE .
+        - run: docker run --rm $DOCKER_IMAGE npm test
+        - run: docker ps
+        - run: docker push $DOCKER_IMAGE
+        - run: |
+            docker tag $DOCKER_IMAGE eritikass/whatever:cicleci-latest
+            docker push eritikass/whatever:cicleci-latest
+
 
 # Orchestrate or schedule a set of jobs, see https://circleci.com/docs/2.0/workflows/
 workflows:
-  build_and_test:
+  testing_things:
     jobs:
-      - welcome/run
-      - test
+      - install
+      - test:
+          requires:
+            - install
