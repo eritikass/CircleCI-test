@@ -15,15 +15,12 @@ jobs:
       steps:
         - checkout
         - restore_cache:
-            key: dependency-cache-{{ .Branch }}-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
-        - run: ls -lah ./node_modules || true
+            key: node-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
         - run: time npm ci
-        - run: touch ./node_modules/xxx123
         - save_cache:
-            key: dependency-cache-{{ .Branch }}-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+            key: node-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
             paths:
               - ./node_modules
-        - run: ls -lah ./node_modules
 
     test:
       docker:
@@ -31,8 +28,7 @@ jobs:
       steps:
         - checkout
         - restore_cache:
-            key: dependency-cache-{{ .Branch }}-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
-        - run: ls -lah ./node_modules
+            key: node-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
         - setup_remote_docker
         - run: |
             docker login -u $DOCKER_USER -p $DOCKER_PASS
