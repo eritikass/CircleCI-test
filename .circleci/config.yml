@@ -33,12 +33,16 @@ jobs:
         - run: |
             docker login -u $DOCKER_USER -p $DOCKER_PASS
             echo "export DOCKER_IMAGE=eritikass/whatever:cicleci-$CIRCLE_WORKFLOW_ID" >> $BASH_ENV
+            docker pull eritikass/whatever:cicleci-latest || true
         - run: echo $DOCKER_IMAGE
         - run: npm test
         - run: docker build --pull -t $DOCKER_IMAGE .
         - run: docker run --rm $DOCKER_IMAGE npm test
         - run: docker ps
         - run: docker push $DOCKER_IMAGE
+        - run: |
+            docker tag $DOCKER_IMAGE eritikass/whatever:cicleci-latest
+            docker push eritikass/whatever:cicleci-latest
 
 
 # Orchestrate or schedule a set of jobs, see https://circleci.com/docs/2.0/workflows/
