@@ -16,7 +16,7 @@ jobs:
         - checkout
         - restore_cache:
             key: dependency-cache-{{ .Branch }}-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
-        - run: ls -lah ./node_modules | true
+        - run: ls -lah ./node_modules || true
         - run: time npm ci
         - run: touch ./node_modules/xxx123
         - save_cache:
