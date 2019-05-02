@@ -1,8 +1,4 @@
-FROM node:10-alpine
-
-RUN apk add alpine-sdk curl tar
-RUN apk add python
-RUN apk add curl-doc
+FROM scratch
 
 WORKDIR /app
-COPY . /app
+COPY index.html /app
