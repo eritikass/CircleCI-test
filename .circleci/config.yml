@@ -45,7 +45,7 @@ jobs:
         - run: |
             docker tag $DOCKER_IMAGE eritikass/whatever:cicleci-latest
             docker push eritikass/whatever:cicleci-latest
-
+      jobs:
         # build and push image to ECR
         - aws-ecr/build_and_push_image:
 
