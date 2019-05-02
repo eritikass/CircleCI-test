@@ -45,42 +45,7 @@ jobs:
         - run: |
             docker tag $DOCKER_IMAGE eritikass/whatever:cicleci-latest
             docker push eritikass/whatever:cicleci-latest
-      jobs:
-        # build and push image to ECR
-        - aws-ecr/build_and_push_image:
 
-            # # required if any necessary secrets are stored via Contexts
-            # context: myContext
-
-            # # AWS profile name, defaults to "default"
-            # profile-name: myProfileName
-
-            # # name of env var storing your AWS Access Key ID, defaults to AWS_ACCESS_KEY_ID
-            # aws-access-key-id: ACCESS_KEY_ID_ENV_VAR_NAME
-
-            # # name of env var storing your AWS Secret Access Key, defaults to AWS_SECRET_ACCESS_KEY
-            # aws-secret-access-key: SECRET_ACCESS_KEY_ENV_VAR_NAME
-
-            # # name of env var storing your AWS region, defaults to AWS_REGION
-            # region: eu-west-1
-
-            # # name of env var storing your ECR account URL, defaults to AWS_ECR_ACCOUNT_URL
-            # account-url: AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME
-
-            # name of your ECR repository
-            repo: "foo/fe"
-
-            # set this to true to create the repository if it does not already exist, defaults to "false"
-            create-repo: false
-
-            # ECR image tag, defaults to "latest"
-            tag: myECRRepoTag
-
-            # # name of Dockerfile to use, defaults to "Dockerfile"
-            # dockerfile: Dockerfile
-
-            # # path to Dockerfile, defaults to . (working directory)
-            # path: .
 
 # Orchestrate or schedule a set of jobs, see https://circleci.com/docs/2.0/workflows/
 workflows:
@@ -90,3 +55,38 @@ workflows:
       - test:
           requires:
             - install
+      # build and push image to ECR
+      - aws-ecr/build_and_push_image:
+
+          # # required if any necessary secrets are stored via Contexts
+          # context: myContext
+
+          # # AWS profile name, defaults to "default"
+          # profile-name: myProfileName
+
+          # # name of env var storing your AWS Access Key ID, defaults to AWS_ACCESS_KEY_ID
+          # aws-access-key-id: ACCESS_KEY_ID_ENV_VAR_NAME
+
+          # # name of env var storing your AWS Secret Access Key, defaults to AWS_SECRET_ACCESS_KEY
+          # aws-secret-access-key: SECRET_ACCESS_KEY_ENV_VAR_NAME
+
+          # # name of env var storing your AWS region, defaults to AWS_REGION
+          # region: eu-west-1
+
+          # # name of env var storing your ECR account URL, defaults to AWS_ECR_ACCOUNT_URL
+          # account-url: AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME
+
+          # name of your ECR repository
+          repo: "foo/fe"
+
+          # set this to true to create the repository if it does not already exist, defaults to "false"
+          create-repo: false
+
+          # ECR image tag, defaults to "latest"
+          tag: myECRRepoTag
+
+          # # name of Dockerfile to use, defaults to "Dockerfile"
+          # dockerfile: Dockerfile
+
+          # # path to Dockerfile, defaults to . (working directory)
+          # path: .
