@@ -83,7 +83,7 @@ workflows:
           create-repo: false
 
           # ECR image tag, defaults to "latest"
-          tag: myECRRepoTag
+          tag: myECRRepoTag3
 
           # # name of Dockerfile to use, defaults to "Dockerfile"
           # dockerfile: Dockerfile
