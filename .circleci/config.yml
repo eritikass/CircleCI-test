@@ -24,6 +24,14 @@ jobs:
             paths:
               - ./node_modules
 
+    test12:
+      docker:
+        image:
+          - image: eritikass/whatever:t12
+        steps:
+          - checkout
+          - run: ls -lah
+
     test:
       docker:
         - image: circleci/node:10
@@ -55,6 +63,7 @@ workflows:
       - test:
           requires:
             - install
+      - test12
       # build and push image to ECR
       - aws-ecr/build_and_push_image:
 
