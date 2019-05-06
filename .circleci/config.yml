@@ -1,58 +1,29 @@
 # Use the latest 2.1 version of CircleCI pipeline processing engine, see https://circleci.com/docs/2.0/configuration-reference/
 version: 2.1
 
-# # Use a package of configuration called an orb, see https://circleci.com/docs/2.0/orb-intro/
-# orbs:
-#   # Declare a dependency on the welcome-orb
-#   welcome: circleci/welcome-orb@0.3.1
-
-orbs:
-  aws-ecr: circleci/aws-ecr@1.0.0
-
 
 jobs:
-    install:
+    test:
       docker:
         - image: circleci/node:10
       steps:
         - checkout
-        # - restore_cache:
-        #     key: node-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
-        - run: time npm ci
-        - save_cache:
-            key: node-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
-            paths:
-              - ./node_modules
-
-    test12:
-      docker:
-        image:
-          - image: eritikass/whatever:t12
-        steps:
-          - checkout
-          - run: ls -lah
+        - run: |
+            echo "hello world"
+            echo "CIRCLE_SHA1=[$CIRCLE_SHA1]"
+            echo "CIRCLE_TAG=[$CIRCLE_TAG]"
+            echo "CIRCLE_BRANCH=[$CIRCLE_BRANCH]"
 
     test:
       docker:
         - image: circleci/node:10
       steps:
         - checkout
-        - restore_cache:
-            key: node-v1-{{ .Branch }}-{{ checksum "package-lock.json" }}
-        # - setup_remote_docker
-        # - run: |
-        #     docker login -u $DOCKER_USER -p $DOCKER_PASS
-        #     echo "export DOCKER_IMAGE=eritikass/whatever:cicleci-$CIRCLE_WORKFLOW_ID" >> $BASH_ENV
-        #     docker pull eritikass/whatever:cicleci-latest || true
-        # - run: echo $DOCKER_IMAGE
-        # - run: npm test
-        # - run: docker build --pull -t $DOCKER_IMAGE .
-        # - run: docker run --rm $DOCKER_IMAGE npm test
-        # - run: docker ps
-        # - run: docker push $DOCKER_IMAGE
-        # - run: |
-        #     docker tag $DOCKER_IMAGE eritikass/whatever:cicleci-latest
-        #     docker push eritikass/whatever:cicleci-latest
+        - run: |
+            echo "hello world"
+            echo "CIRCLE_SHA1=[$CIRCLE_SHA1]"
+            echo "CIRCLE_TAG=[$CIRCLE_TAG]"
+            echo "CIRCLE_BRANCH=[$CIRCLE_BRANCH]"
 
 
 # Orchestrate or schedule a set of jobs, see https://circleci.com/docs/2.0/workflows/
@@ -63,39 +34,3 @@ workflows:
       - test:
           requires:
             - install
-      - test12
-      # build and push image to ECR
-      - aws-ecr/build_and_push_image:
-
-          # # required if any necessary secrets are stored via Contexts
-          # context: myContext
-
-          # # AWS profile name, defaults to "default"
-          # profile-name: myProfileName
-
-          # # name of env var storing your AWS Access Key ID, defaults to AWS_ACCESS_KEY_ID
-          # aws-access-key-id: ACCESS_KEY_ID_ENV_VAR_NAME
-
-          # # name of env var storing your AWS Secret Access Key, defaults to AWS_SECRET_ACCESS_KEY
-          # aws-secret-access-key: SECRET_ACCESS_KEY_ENV_VAR_NAME
-
-          # # name of env var storing your AWS region, defaults to AWS_REGION
-          # region: eu-west-1
-
-          # # name of env var storing your ECR account URL, defaults to AWS_ECR_ACCOUNT_URL
-          # account-url: AWS_ECR_ACCOUNT_URL_ENV_VAR_NAME
-
-          # name of your ECR repository
-          repo: "foo/fe"
-
-          # set this to true to create the repository if it does not already exist, defaults to "false"
-          create-repo: false
-
-          # ECR image tag, defaults to "latest"
-          tag: "myECRRepoTag_${CIRCLE_SHA1}"
-
-          # # name of Dockerfile to use, defaults to "Dockerfile"
-          # dockerfile: Dockerfile
-
-          # # path to Dockerfile, defaults to . (working directory)
-          # path: .
