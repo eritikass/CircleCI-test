@@ -46,9 +46,15 @@ workflows:
             tags:
               only: /.*/
       - test:
+          filters:
+            tags:
+              only: /.*/
           requires:
             - install
       - build:
+          filters:
+            tags:
+              only: /.*/
           requires:
             - install
             - test
