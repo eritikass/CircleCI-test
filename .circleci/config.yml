@@ -41,7 +41,10 @@ jobs:
 workflows:
   testing_things:
     jobs:
-      - install
+      - install:
+          filters:
+            tags:
+              only: /.*/
       - test:
           requires:
             - install
