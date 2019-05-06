@@ -3,7 +3,7 @@ version: 2.1
 
 
 jobs:
-    test:
+    install:
       docker:
         - image: circleci/node:10
       steps:
@@ -15,6 +15,17 @@ jobs:
             echo "CIRCLE_BRANCH=[$CIRCLE_BRANCH]"
 
     test:
+      docker:
+        - image: circleci/node:10
+      steps:
+        - checkout
+        - run: |
+            echo "hello world"
+            echo "CIRCLE_SHA1=[$CIRCLE_SHA1]"
+            echo "CIRCLE_TAG=[$CIRCLE_TAG]"
+            echo "CIRCLE_BRANCH=[$CIRCLE_BRANCH]"
+
+    build:
       docker:
         - image: circleci/node:10
       steps:
@@ -34,3 +45,7 @@ workflows:
       - test:
           requires:
             - install
+      - build:
+          requires:
+            - install
+            - test
