@@ -60,6 +60,10 @@ jobs:
 workflows:
   testing_things:
     jobs:
+      - make_docker:
+          filters:
+            tags:
+              only: /.*/
       - install:
           filters:
             tags:
