@@ -29,6 +29,8 @@ jobs:
               export DOCKER_IMAGE="eritikass/whatever:ci-test-$CIRCLE_BUILD_NUM"
               echo "$DOCKER_IMAGE"
 
+              GIT_DESCRIBE="`git describe --abbrev=4 --always --tags --dirty`"
+
               docker build -t "$DOCKER_IMAGE" \
                  --label CIRCLECI="${CIRCLECI}" \
                  --label CIRCLE_WORKFLOW_ID="${CIRCLE_WORKFLOW_ID}" \
@@ -39,7 +41,9 @@ jobs:
                  --label CIRCLE_PULL_REQUEST="${CIRCLE_PULL_REQUEST}" \
                  --label CIRCLE_PROJECT_USERNAME="${CIRCLE_PROJECT_USERNAME}" \
                  --label CIRCLE_BUILD_URL="${CIRCLE_BUILD_URL}" \
+                 --label CIRCLE_COMPARE_URL="${CIRCLE_COMPARE_URL}" \
                  --label CIRCLE_BRANCH="${CIRCLE_BRANCH}" \
+                 --label GIT_DESCRIBE="${GIT_DESCRIBE}" \
                  .
 
               docker push "$DOCKER_IMAGE"
