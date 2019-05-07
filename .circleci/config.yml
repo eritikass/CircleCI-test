@@ -1,7 +1,6 @@
 # Use the latest 2.1 version of CircleCI pipeline processing engine, see https://circleci.com/docs/2.0/configuration-reference/
 version: 2.1
 
-
 jobs:
     install:
       docker:
@@ -17,8 +16,6 @@ jobs:
     make_docker:
       docker:
         - image: circleci/node:10
-      environment:
-        DOCKER_IMAGE: "eritikass/whatever:ci-test-$CIRCLE_BUILD_NUM"
       steps:
         - checkout
         - setup_remote_docker
@@ -29,6 +26,7 @@ jobs:
         - run:
             name: "Build/push docker"
             command: |
+              export DOCKER_IMAGE="eritikass/whatever:ci-test-$CIRCLE_BUILD_NUM"
               echo "$DOCKER_IMAGE"
               docker build -t "$DOCKER_IMAGE" .
               docker push "$DOCKER_IMAGE"
