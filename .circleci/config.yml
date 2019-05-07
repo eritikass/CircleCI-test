@@ -15,7 +15,7 @@ jobs:
 
     make_docker:
       docker:
-        - image: circleci/node:10
+        - image: circleci/python
       steps:
         - checkout
         - setup_remote_docker
@@ -47,6 +47,8 @@ jobs:
                  .
 
               docker push "$DOCKER_IMAGE"
+
+              docker inspect --format '{{ json .Config.Labels }}' "$DOCKER_IMAGE" | python -m json.tool
 
     test:
       docker:
