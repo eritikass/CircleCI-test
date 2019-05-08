@@ -61,8 +61,11 @@ jobs:
     test:
       docker:
         - image: circleci/node:10
+      working_directory: ~/repo
       steps:
+        - run: ls -lah
         - checkout
+        - run: ls -lah
         - run: |
             echo "hello world"
             echo "CIRCLE_SHA1=[$CIRCLE_SHA1]"
@@ -72,8 +75,11 @@ jobs:
     build:
       docker:
         - image: circleci/node:10
+      working_directory: ~/repo
       steps:
+        - run: ls -lah
         - checkout
+        - run: ls -lah
         - run: |
             echo "hello world"
             echo "CIRCLE_SHA1=[$CIRCLE_SHA1]"
