@@ -70,6 +70,7 @@ jobs:
         - run: echo "${CIRCLE_WORKFLOW_ID}"
         - run: pwd
         - run: ls -lah
+        - run: cd /app && pwd && ls -lah
         # - run:
         #     name: "test docker"
         #     command: |
