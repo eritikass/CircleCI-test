@@ -66,14 +66,12 @@ jobs:
         - setup_remote_docker
         - run: echo "${CIRCLE_WORKFLOW_ID}"
         - run:
-          name: "test docker"
-          command: |
-            docker login -u $DOCKER_USER -p $DOCKER_PASS
-            
-            export DOCKER_IMAGE="eritikass/whatever:ci-test-${CIRCLE_WORKFLOW_ID}"
-            echo "$DOCKER_IMAGE"
-            
-            docker pull "$DOCKER_IMAGE"
+            name: "test docker"
+            command: |
+              docker login -u $DOCKER_USER -p $DOCKER_PASS
+              export DOCKER_IMAGE="eritikass/whatever:ci-test-${CIRCLE_WORKFLOW_ID}"
+              echo "$DOCKER_IMAGE"
+              docker pull "$DOCKER_IMAGE"
 
     # test:
     #   docker:
