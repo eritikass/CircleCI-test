@@ -2,24 +2,24 @@
 version: 2.1
 
 jobs:
-    install:
-      docker:
-        - image: circleci/node:10
-      working_directory: ~/repo
-      steps:
-        - checkout
-        - run: |
-            echo "hello world"
-            echo "CIRCLE_SHA1=[$CIRCLE_SHA1]"
-            echo "CIRCLE_TAG=[$CIRCLE_TAG]"
-            echo "CIRCLE_BRANCH=[$CIRCLE_BRANCH]"
-        - run:
-            name: "install node modules"
-            command: "npm ci"
-        - persist_to_workspace:
-            root: ~/repo
-            paths:
-              - node_modules
+    # install:
+    #   docker:
+    #     - image: circleci/node:10
+    #   working_directory: ~/repo
+    #   steps:
+    #     - checkout
+    #     - run: |
+    #         echo "hello world"
+    #         echo "CIRCLE_SHA1=[$CIRCLE_SHA1]"
+    #         echo "CIRCLE_TAG=[$CIRCLE_TAG]"
+    #         echo "CIRCLE_BRANCH=[$CIRCLE_BRANCH]"
+    #     - run:
+    #         name: "install node modules"
+    #         command: "npm ci"
+    #     - persist_to_workspace:
+    #         root: ~/repo
+    #         paths:
+    #           - node_modules
 
     make_docker:
       docker:
@@ -58,45 +58,53 @@ jobs:
 
               docker inspect --format '{{ json .Config.Labels }}' "$DOCKER_IMAGE" | python -m json.tool
 
-    test:
+    use_docker:
       docker:
-        - image: circleci/node:10
-      working_directory: ~/repo
+        - image: circleci/python
       steps:
-        - run: ls -lah
         - checkout
-        - run: ls -lah
-        - attach_workspace:
-            at: ~/repo
-        - run: ls -lah
-        - run: touch node_modules/cat.txt
-        - run: ls -lah node_modules
-        - run: |
-            echo "hello world"
-            echo "CIRCLE_SHA1=[$CIRCLE_SHA1]"
-            echo "CIRCLE_TAG=[$CIRCLE_TAG]"
-            echo "CIRCLE_BRANCH=[$CIRCLE_BRANCH]"
+        - setup_remote_docker
+        - run: echo "$CIRCLE_BUILD_NUM"
 
-    build:
-      docker:
-        - image: circleci/node:10
-      working_directory: ~/repo
-      steps:
-        - run: ls -lah
-        - checkout
-        - run: ls -lah
-        - attach_workspace:
-            at: ~/repo
-        - run: ls -lah
-        - run: ls -lah node_modules
-        - run: |
-            echo "hello world"
-            echo "CIRCLE_SHA1=[$CIRCLE_SHA1]"
-            echo "CIRCLE_TAG=[$CIRCLE_TAG]"
-            echo "CIRCLE_BRANCH=[$CIRCLE_BRANCH]"
-        - store_artifacts:
-            path: ~/repo/node_modules/chalk
-            destination: chalk-stuff
+    # test:
+    #   docker:
+    #     - image: circleci/node:10
+    #   working_directory: ~/repo
+    #   steps:
+    #     - run: ls -lah
+    #     - checkout
+    #     - run: ls -lah
+    #     - attach_workspace:
+    #         at: ~/repo
+    #     - run: ls -lah
+    #     - run: touch node_modules/cat.txt
+    #     - run: ls -lah node_modules
+    #     - run: |
+    #         echo "hello world"
+    #         echo "CIRCLE_SHA1=[$CIRCLE_SHA1]"
+    #         echo "CIRCLE_TAG=[$CIRCLE_TAG]"
+    #         echo "CIRCLE_BRANCH=[$CIRCLE_BRANCH]"
+
+    # build:
+    #   docker:
+    #     - image: circleci/node:10
+    #   working_directory: ~/repo
+    #   steps:
+    #     - run: ls -lah
+    #     - checkout
+    #     - run: ls -lah
+    #     - attach_workspace:
+    #         at: ~/repo
+    #     - run: ls -lah
+    #     - run: ls -lah node_modules
+    #     - run: |
+    #         echo "hello world"
+    #         echo "CIRCLE_SHA1=[$CIRCLE_SHA1]"
+    #         echo "CIRCLE_TAG=[$CIRCLE_TAG]"
+    #         echo "CIRCLE_BRANCH=[$CIRCLE_BRANCH]"
+    #     - store_artifacts:
+    #         path: ~/repo/node_modules/chalk
+    #         destination: chalk-stuff
 
 
 # Orchestrate or schedule a set of jobs, see https://circleci.com/docs/2.0/workflows/
@@ -107,20 +115,29 @@ workflows:
           filters:
             tags:
               only: /.*/
-      - install:
-          filters:
-            tags:
-              only: /.*/
-      - test:
-          filters:
-            tags:
-              only: /.*/
-          requires:
-            - install
-      - build:
+
+      - use_docker:
           filters:
             tags:
               only: /.*/
           requires:
-            - install
-            - test
+            - make_docker
+
+
+      # - install:
+      #     filters:
+      #       tags:
+      #         only: /.*/
+      # - test:
+      #     filters:
+      #       tags:
+      #         only: /.*/
+      #     requires:
+      #       - install
+      # - build:
+      #     filters:
+      #       tags:
+      #         only: /.*/
+      #     requires:
+      #       - install
+      #       - test
