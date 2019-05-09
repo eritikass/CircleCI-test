@@ -61,6 +61,9 @@ jobs:
     use_docker:
       docker:
         - image: eritikass/whatever:ci-test-$CIRCLE_WORKFLOW_ID
+          auth:
+            username: $DOCKER_USER
+            password: $DOCKER_PASS
       steps:
         - checkout
         - setup_remote_docker
