@@ -34,7 +34,7 @@ jobs:
         - run:
             name: "Build/push docker"
             command: |
-              export DOCKER_IMAGE="eritikass/whatever:ci-test-$CIRCLE_BUILD_NUM"
+              export DOCKER_IMAGE="eritikass/whatever:ci-test-${CIRCLE_WORKFLOW_ID}"
               echo "$DOCKER_IMAGE"
 
               GIT_DESCRIBE="`git describe --abbrev=4 --always --tags --dirty`"
@@ -64,7 +64,16 @@ jobs:
       steps:
         - checkout
         - setup_remote_docker
-        - run: echo "$CIRCLE_BUILD_NUM"
+        - run: echo "${CIRCLE_WORKFLOW_ID}"
+        - run:
+          name: "test docker"
+          command: |
+            docker login -u $DOCKER_USER -p $DOCKER_PASS
+            
+            export DOCKER_IMAGE="eritikass/whatever:ci-test-${CIRCLE_WORKFLOW_ID}"
+            echo "$DOCKER_IMAGE"
+            
+            docker pull "$DOCKER_IMAGE"
 
     # test:
     #   docker:
