@@ -60,18 +60,20 @@ jobs:
 
     use_docker:
       docker:
-        - image: circleci/python
+        - image: eritikass/whatever:ci-test-$CIRCLE_WORKFLOW_ID
       steps:
         - checkout
         - setup_remote_docker
         - run: echo "${CIRCLE_WORKFLOW_ID}"
-        - run:
-            name: "test docker"
-            command: |
-              docker login -u $DOCKER_USER -p $DOCKER_PASS
-              export DOCKER_IMAGE="eritikass/whatever:ci-test-${CIRCLE_WORKFLOW_ID}"
-              echo "$DOCKER_IMAGE"
-              docker pull "$DOCKER_IMAGE"
+        - run: pwd
+        - run: ls -lah
+        # - run:
+        #     name: "test docker"
+        #     command: |
+        #       docker login -u $DOCKER_USER -p $DOCKER_PASS
+        #       export DOCKER_IMAGE="eritikass/whatever:ci-test-${CIRCLE_WORKFLOW_ID}"
+        #       echo "$DOCKER_IMAGE"
+        #       docker pull "$DOCKER_IMAGE"
 
     # test:
     #   docker:
