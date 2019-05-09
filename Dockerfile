@@ -1,4 +1,4 @@
-FROM scratch
+FROM alpine
 
 LABEL RANDOM_DATA="there is some value"
 
