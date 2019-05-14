@@ -7,7 +7,7 @@ jobs:
         - image: alpine
       steps:
         - run: echo $CIRCLE_BRANCH
-        - run: ${CIRCLE_BRANCH/\//-}
+        - run: echo ${CIRCLE_BRANCH/\//-}
 
     # install:
     #   docker:
