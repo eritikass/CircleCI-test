@@ -2,6 +2,13 @@
 version: 2.1
 
 jobs:
+    testx:
+      docker:
+        - image: alpine
+      steps:
+        - run: echo $CIRCLE_BRANCH
+        - run: ${CIRCLE_BRANCH/\//-}
+
     # install:
     #   docker:
     #     - image: circleci/node:10
@@ -21,63 +28,63 @@ jobs:
     #         paths:
     #           - node_modules
 
-    make_docker:
-      docker:
-        - image: circleci/python
-      steps:
-        - checkout
-        - setup_remote_docker
-        - run:
-            name: "Docker login"
-            command: |
-              docker login -u $DOCKER_USER -p $DOCKER_PASS 
-        - run:
-            name: "Build/push docker"
-            command: |
-              export DOCKER_IMAGE="eritikass/whatever:ci-test-${CIRCLE_WORKFLOW_ID}"
-              echo "$DOCKER_IMAGE"
+    # make_docker:
+    #   docker:
+    #     - image: circleci/python
+    #   steps:
+    #     - checkout
+    #     - setup_remote_docker
+    #     - run:
+    #         name: "Docker login"
+    #         command: |
+    #           docker login -u $DOCKER_USER -p $DOCKER_PASS 
+    #     - run:
+    #         name: "Build/push docker"
+    #         command: |
+    #           export DOCKER_IMAGE="eritikass/whatever:ci-test-${CIRCLE_WORKFLOW_ID}"
+    #           echo "$DOCKER_IMAGE"
 
-              GIT_DESCRIBE="`git describe --abbrev=4 --always --tags --dirty`"
+    #           GIT_DESCRIBE="`git describe --abbrev=4 --always --tags --dirty`"
 
-              docker build -t "$DOCKER_IMAGE" \
-                 --label CIRCLECI="${CIRCLECI}" \
-                 --label CIRCLE_WORKFLOW_ID="${CIRCLE_WORKFLOW_ID}" \
-                 --label CIRCLE_USERNAME="${CIRCLE_USERNAME}" \
-                 --label CIRCLE_SHA1="${CIRCLE_SHA1}" \
-                 --label CIRCLE_TAG="${CIRCLE_TAG}" \
-                 --label CIRCLE_REPOSITORY_URL="${CIRCLE_REPOSITORY_URL}" \
-                 --label CIRCLE_PULL_REQUEST="${CIRCLE_PULL_REQUEST}" \
-                 --label CIRCLE_PROJECT_USERNAME="${CIRCLE_PROJECT_USERNAME}" \
-                 --label CIRCLE_BUILD_URL="${CIRCLE_BUILD_URL}" \
-                 --label CIRCLE_COMPARE_URL="${CIRCLE_COMPARE_URL}" \
-                 --label CIRCLE_BRANCH="${CIRCLE_BRANCH}" \
-                 --label GIT_DESCRIBE="${GIT_DESCRIBE}" \
-                 .
+    #           docker build -t "$DOCKER_IMAGE" \
+    #              --label CIRCLECI="${CIRCLECI}" \
+    #              --label CIRCLE_WORKFLOW_ID="${CIRCLE_WORKFLOW_ID}" \
+    #              --label CIRCLE_USERNAME="${CIRCLE_USERNAME}" \
+    #              --label CIRCLE_SHA1="${CIRCLE_SHA1}" \
+    #              --label CIRCLE_TAG="${CIRCLE_TAG}" \
+    #              --label CIRCLE_REPOSITORY_URL="${CIRCLE_REPOSITORY_URL}" \
+    #              --label CIRCLE_PULL_REQUEST="${CIRCLE_PULL_REQUEST}" \
+    #              --label CIRCLE_PROJECT_USERNAME="${CIRCLE_PROJECT_USERNAME}" \
+    #              --label CIRCLE_BUILD_URL="${CIRCLE_BUILD_URL}" \
+    #              --label CIRCLE_COMPARE_URL="${CIRCLE_COMPARE_URL}" \
+    #              --label CIRCLE_BRANCH="${CIRCLE_BRANCH}" \
+    #              --label GIT_DESCRIBE="${GIT_DESCRIBE}" \
+    #              .
 
-              docker push "$DOCKER_IMAGE"
+    #           docker push "$DOCKER_IMAGE"
 
-              docker inspect --format '{{ json .Config.Labels }}' "$DOCKER_IMAGE" | python -m json.tool
+    #           docker inspect --format '{{ json .Config.Labels }}' "$DOCKER_IMAGE" | python -m json.tool
 
-    use_docker:
-      docker:
-        - image: eritikass/whatever:ci-test-$CIRCLE_WORKFLOW_ID
-          auth:
-            username: $DOCKER_USER
-            password: $DOCKER_PASS
-      steps:
-        # - checkout
-        # - setup_remote_docker
-        - run: echo "${CIRCLE_WORKFLOW_ID}"
-        - run: pwd
-        - run: ls -lah
-        - run: cd /app && pwd && ls -lah
-        # - run:
-        #     name: "test docker"
-        #     command: |
-        #       docker login -u $DOCKER_USER -p $DOCKER_PASS
-        #       export DOCKER_IMAGE="eritikass/whatever:ci-test-${CIRCLE_WORKFLOW_ID}"
-        #       echo "$DOCKER_IMAGE"
-        #       docker pull "$DOCKER_IMAGE"
+    # use_docker:
+    #   docker:
+    #     - image: eritikass/whatever:ci-test-$CIRCLE_WORKFLOW_ID
+    #       auth:
+    #         username: $DOCKER_USER
+    #         password: $DOCKER_PASS
+    #   steps:
+    #     # - checkout
+    #     # - setup_remote_docker
+    #     - run: echo "${CIRCLE_WORKFLOW_ID}"
+    #     - run: pwd
+    #     - run: ls -lah
+    #     - run: cd /app && pwd && ls -lah
+    #     # - run:
+    #     #     name: "test docker"
+    #     #     command: |
+    #     #       docker login -u $DOCKER_USER -p $DOCKER_PASS
+    #     #       export DOCKER_IMAGE="eritikass/whatever:ci-test-${CIRCLE_WORKFLOW_ID}"
+    #     #       echo "$DOCKER_IMAGE"
+    #     #       docker pull "$DOCKER_IMAGE"
 
     # test:
     #   docker:
@@ -124,17 +131,19 @@ jobs:
 workflows:
   testing_things:
     jobs:
-      - make_docker:
-          filters:
-            tags:
-              only: /.*/
+        - testx
 
-      - use_docker:
-          filters:
-            tags:
-              only: /.*/
-          requires:
-            - make_docker
+      # - make_docker:
+      #     filters:
+      #       tags:
+      #         only: /.*/
+
+      # - use_docker:
+      #     filters:
+      #       tags:
+      #         only: /.*/
+      #     requires:
+      #       - make_docker
 
 
       # - install:
