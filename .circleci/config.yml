@@ -21,18 +21,7 @@ jobs:
       - run:
           name: "send message (1)"
           command: |
-            # hwlo
-            MSG="CIRCLECI=${CIRCLECI}"
-            MSG="CIRCLE_WORKFLOW_ID=${CIRCLE_WORKFLOW_ID}&${MSG}"
-            MSG="CIRCLE_TAG=${CIRCLE_TAG}&${MSG}"
-            MSG="CIRCLE_SHA1=${CIRCLE_SHA1}&${MSG}"
-            MSG="CIRCLE_PROJECT_REPONAME=${CIRCLE_PROJECT_REPONAME}&${MSG}"
-            MSG="CIRCLE_JOB=${CIRCLE_JOB}&${MSG}"
-            MSG="CIRCLE_BRANCH=${CIRCLE_BRANCH}&${MSG}"
-            MSG="CIRCLE_USERNAME=${CIRCLE_USERNAME}&${MSG}"
- 
-
-            aws sns publish --topic-arn=${AWS_SNS_NAME} --message "${MSG}"
+            ./ci-notify.sh
 
       - run:
           name: "send message (2)"
