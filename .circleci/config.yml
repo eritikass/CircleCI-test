@@ -9,7 +9,7 @@ jobs:
       - image: registry.gitlab.com/eritikass/ci-database:t1245
     steps:
       - checkout
-      - setup_remote_docker
+      
       - run: aws --version
       - run:
           name: "auth for aws"
@@ -17,9 +17,20 @@ jobs:
             aws configure set aws_access_key_id "$AWS_KEY" --profile "default"
             aws configure set aws_secret_access_key "$AWS_SECRET" --profile "default"
             aws configure set region "eu-west-1" --profile "default"
+
+      # docker stuff
+      - setup_remote_docker
       - run:
           name: "docker login"
           command: $(aws ecr get-login --no-include-email --region eu-west-1)
+      - run:
+          name: "docker build"
+          command: |
+            docker build -t foo/fe .
+            docker tag foo/fe:latest 805248565926.dkr.ecr.eu-west-1.amazonaws.com/foo/fe:latest
+            docker push 805248565926.dkr.ecr.eu-west-1.amazonaws.com/foo/fe:latest
+
+    #
 
 
 
@@ -28,4 +39,3 @@ workflows:
   testing_things:
     jobs:
       - test
-
