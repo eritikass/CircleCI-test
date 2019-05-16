@@ -21,6 +21,7 @@ jobs:
       - run:
           name: "send message"
           command: |
+            # hwlo
             aws sns publish --topic-arn=${AWS_SNS_NAME} --message "test:${CIRCLE_WORKFLOW_ID}"
 
       # docker stuff
