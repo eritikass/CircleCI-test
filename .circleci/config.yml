@@ -18,6 +18,11 @@ jobs:
             aws configure set aws_secret_access_key "$AWS_SECRET" --profile "default"
             aws configure set region "eu-west-1" --profile "default"
 
+      - run:
+          name: "send message"
+          command: |
+            aws sns publish --topic-arn=${AWS_SNS_NAME} --message "kala"
+
       # docker stuff
       - setup_remote_docker
       - run:
