@@ -5,7 +5,7 @@ jobs:
 
     test:
       docker:
-        - image: eritikass/whatever:t1245
+        - image: circleci/python
       steps:
         - checkout
         - setup_remote_docker
