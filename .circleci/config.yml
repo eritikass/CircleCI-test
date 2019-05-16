@@ -4,8 +4,9 @@ version: 2.1
 jobs:
 
     test:
+      working_directory: ~/circleci-test
       docker:
-        - image: circleci/python
+        - image: circleci/python:3.6.4
       steps:
         - checkout
         - setup_remote_docker
