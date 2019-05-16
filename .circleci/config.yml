@@ -3,23 +3,23 @@ version: 2.1
 
 jobs:
 
-    test:
-      working_directory: ~/circleci-test
-      docker:
-        - image: registry.gitlab.com/eritikass/ci-database:t1245
-      steps:
-        - checkout
-        - setup_remote_docker
-        - run: aws --version
-        - run:
-            name: "auth for aws"
-            command: |
-              aws configure set aws_access_key_id "$AWS_KEY" --profile "default"
-              aws configure set aws_secret_access_key "$AWS_SECRET" --profile "default"
-              aws configure set region "eu-west-1" --profile "default"
-         - run:
-            name: "docker login"
-            command: $(aws ecr get-login --no-include-email --region eu-west-1)
+  test:
+    working_directory: ~/circleci-test
+    docker:
+      - image: registry.gitlab.com/eritikass/ci-database:t1245
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run: aws --version
+      - run:
+          name: "auth for aws"
+          command: |
+            aws configure set aws_access_key_id "$AWS_KEY" --profile "default"
+            aws configure set aws_secret_access_key "$AWS_SECRET" --profile "default"
+            aws configure set region "eu-west-1" --profile "default"
+      - run:
+          name: "docker login"
+          command: $(aws ecr get-login --no-include-email --region eu-west-1)
 
 
 
