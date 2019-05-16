@@ -12,7 +12,7 @@ jobs:
         - setup_remote_docker
         - run: 
             name: add aws cli
-            command: pip install awscli
+            command: pip install --progress-bar off awscli
 
 
 # Orchestrate or schedule a set of jobs, see https://circleci.com/docs/2.0/workflows/
