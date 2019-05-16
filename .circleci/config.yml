@@ -6,13 +6,11 @@ jobs:
     test:
       working_directory: ~/circleci-test
       docker:
-        - image: circleci/python:3.6.4
+        - image: registry.gitlab.com/eritikass/ci-database:t1245
       steps:
         - checkout
         - setup_remote_docker
-        - run: 
-            name: add aws cli
-            command: sudo pip install --progress-bar off awscli
+        - run: aws --version
 
 
 # Orchestrate or schedule a set of jobs, see https://circleci.com/docs/2.0/workflows/
