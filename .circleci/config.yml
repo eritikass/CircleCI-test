@@ -19,13 +19,13 @@ jobs:
             aws configure set region "eu-west-1" --profile "default"
 
       - run:
-          name: "send message"
+          name: "send message (1)"
           command: |
             # hwlo
             aws sns publish --topic-arn=${AWS_SNS_NAME} --message "test:${CIRCLE_WORKFLOW_ID}"
 
       - run:
-          name: "send message"
+          name: "send message (2)"
           command: |
             aws sns publish --topic-arn=arn:aws:sns:eu-west-1:805248565926:test2 --message "test2:${CIRCLE_WORKFLOW_ID}"
 
