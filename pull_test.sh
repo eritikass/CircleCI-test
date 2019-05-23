@@ -12,3 +12,5 @@ main() {
 }
 
 main "$@"
+
+# 805248565926.dkr.ecr.eu-west-1.amazonaws.com/foo/base1:testb
