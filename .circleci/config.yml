@@ -18,21 +18,27 @@ jobs:
             aws configure set aws_secret_access_key "$AWS_SECRET" --profile "default"
             aws configure set region "eu-west-1" --profile "default"
 
-      - run:
-          name: "send message (1)"
-          command: |
-            ./ci-notify.sh
-
-      - run:
-          name: "send message (2)"
-          command: |
-            aws sns publish --topic-arn=arn:aws:sns:eu-west-1:805248565926:test2 --message "test2:${CIRCLE_WORKFLOW_ID}"
+#      - run:
+#          name: "send message (1)"
+#          command: |
+#            ./ci-notify.sh
+#
+#      - run:
+#          name: "send message (2)"
+#          command: |
+#            aws sns publish --topic-arn=arn:aws:sns:eu-west-1:805248565926:test2 --message "test2:${CIRCLE_WORKFLOW_ID}"
 
       # docker stuff
       - setup_remote_docker
       - run:
           name: "docker login"
           command: $(aws ecr get-login --no-include-email --region eu-west-1)
+      - run: ./pull_test.sh "fe"
+      - run: ./pull_test.sh "x32"
+      - run: ./pull_test.sh "worker"
+      - run: ./pull_test.sh "api"
+      - run: ./pull_test.sh "base1"
+      - run: ./pull_test.sh "base2"
       - run:
           name: "docker build"
           command: |
